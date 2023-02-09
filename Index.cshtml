@@ -1,0 +1,165 @@
+﻿
+@{
+    Layout = null;
+}
+
+@using Crud_Operation_1.Models
+@model List<StudentMaster>
+<!DOCTYPE html>
+<h2>Student Details</h2>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+
+
+    <!-- Datatable plugin CSS file -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css" />
+
+    <!-- jQuery library file -->
+    <script type="text/javascript"
+            src="https://code.jquery.com/jquery-3.5.1.js">
+    </script>
+
+    <!-- Datatable plugin JS library file -->
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js">
+    </script>
+
+    <script src="~/Content/JQuery.js"></script>
+</head>
+<body>
+    
+    @TempData["Update"]
+    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="th-sm">
+                    Id
+                </th>
+                <th class="th-sm">
+                    Teacher
+                </th>
+                <th class="th-sm">
+                    First Name
+                </th>
+                <th class="th-sm">
+                    Last Name
+                </th>
+                <th class="th-sm">
+                    DOB
+                </th>
+                <th class="th-sm">
+                    Gender
+                </th>
+                <th class="th-sm">
+                    Manage
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (StudentMaster stm in Model)
+                {
+                    <tr>
+                        <td>@stm.id</td>
+                        <td>@stm.TeacherMaster.First_Name @stm.TeacherMaster.Last_Name</td>
+                        <td>@stm.First_Name</td>
+                        <td>@stm.last_Name</td>
+                        <td>@stm.Date_of_Birth</td>
+                        <td>@stm.Gender</td>
+                        <td>@Html.ActionLink("Delete", "Delete", new { Id = stm.id }) || <a href="#EditModal" data-bs-toggle="modal" data-bs-target="#EditModal" data-id="@stm.id" class="Edit">Edit</a></td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+
+    </table>
+
+
+
+
+
+    <p>@ViewBag.Msg</p>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddModal" id="AddStModal">
+        Add New Student
+    </button>
+
+    <!-- Modal -->
+    <form action="/home/AddNewStudent" method="post">
+        <div class="modal fade" id="AddModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                       
+                        <label>First Name :</label>
+                        <input type="text" name="First_Name" placeholder="Enter Your First Name" value="" /><br><br>
+                        <label>Last Name :</label>
+                        <input type="text" name="Last_Name" placeholder="Enter Your Last Name" /><br><br>
+                        <label>Date of Birth :</label>
+                        <input type="date" name="Date_of_Birth" /><br><br>
+                        <label>Gender :</label>
+                        <input type="radio" name="Gender" value="Male" />Male
+                        <input type="radio" name="Gender" value="Female" />Female<br><br>
+                        <select name="Teacher_Id" id="DDlTeacher">
+                            <option value="">Select Teacher</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save Records" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <form action="/home/UpdateDetails" method="post">
+        <div class="modal fade" id="EditModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <label>First Name :</label>
+                        <input type="text" id="stuid" name="id" value="" hidden>
+                        <input type="text" id="StuFirstName" name="First_Name" placeholder="Enter Your First Name" /><br><br>
+                        <label>Last Name :</label>
+                        <input type="text" name="Last_Name" id="StuLastName" placeholder="Enter Your Last Name" /><br><br>
+                        <label>Date of Birth :</label>
+                        <input type="date" id="DOB" name="Date_of_Birth" /><br><br>
+                        <label>Gender :</label>
+                        <input type="radio" name="Gender" id="rdbmale" value="Male" />Male
+                        <input type="radio" name="Gender" id="rdbfemale" value="Female" />Female<br><br>
+                        <select name="Teacher_Id" id="DDlTeacher2">
+                            <option value="">Select Teacher</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <input type="submit" class="btn btn-primary" value="Save Records" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <table id="StudentsTbl" class="display">
+    </table>
+
+
+</body>
+</html>
